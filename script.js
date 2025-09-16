@@ -5,32 +5,23 @@ window.onload = function() {
 };
 
 // === UTILITAS: SIMPAN & AMBIL ASPIRASI ===
-// Simpan aspirasi ke Firestore
-function saveAspirasi(judul, kategori, deskripsi) {
-  db.collection("aspirasi").add({
-    judul: judul,
-    kategori: kategori,
-    deskripsi: deskripsi,
-    tanggal: new Date().toISOString()
-  }).then(() => {
-    alert("Aspirasi berhasil dikirim 🎉");
-  }).catch((error) => {
-    console.error("Error:", error);
-  });
+function saveAspirasi(aspirasi) {
+  let data = JSON.parse(localStorage.getItem("aspirasiList")) || [];
+  aspirasi.waktu = new Date().toISOString(); // simpan waktu
+  data.push(aspirasi);
+  localStorage.setItem("aspirasiList", JSON.stringify(data));
 }
-
 
 function getAspirasi() {
   return JSON.parse(localStorage.getItem("aspirasiList")) || [];
 }
 
-function deleteAspirasi(id) {
-  db.collection("aspirasi").doc(id).delete().then(() => {
-    alert("Aspirasi dihapus ✅");
-    loadAspirasi();
-  });
+function deleteAspirasi(index) {
+  let data = getAspirasi();
+  data.splice(index, 1);
+  localStorage.setItem("aspirasiList", JSON.stringify(data));
+  renderAspirasiList(); // refresh tampilan
 }
-
 
 // === FORM ASPIRASI ===
 function openForm() {
@@ -93,27 +84,6 @@ function lihatAspirasi() {
 
   document.getElementById("aspirasiPasswordEnterBtn").addEventListener("click", checkAspirasiPassword);
   document.getElementById("aspirasiPasswordCancelBtn").addEventListener("click", () => renderHome());
-  function loadAspirasi() {
-  const container = document.getElementById("aspirasiList");
-  container.innerHTML = "";
-
-  db.collection("aspirasi").orderBy("tanggal", "desc").get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        const div = document.createElement("div");
-        div.className = "aspirasi-item";
-        div.innerHTML = `
-          <h3>${data.judul}</h3>
-          <p><b>Kategori:</b> ${data.kategori}</p>
-          <p>${data.deskripsi}</p>
-          <small>${new Date(data.tanggal).toLocaleString()}</small>
-        `;
-        container.appendChild(div);
-      });
-    });
-}
-
 }
 
 function checkAspirasiPassword() {
