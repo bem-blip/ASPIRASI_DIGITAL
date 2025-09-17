@@ -1,127 +1,93 @@
 <!DOCTYPE html>
 <html lang="id">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aspirasi Mahasiswa</title>
   <link rel="stylesheet" href="style.css">
-</head>
-  <!-- Chart.js harus diload dulu -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <!-- Baru script kamu -->
-  <script src="script.js"></script>
-
-  <script type="module">
-  // Import Firebase
-  import { initializeApp } from "firebase/app";
-  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "firebase/analytics";
-  // 🔑 Ganti dengan config dari Firebase kamu
-  const firebaseConfig = {
-    apiKey: "AIzaSyCDLjvCpLxPtFJ6XBDOE6kTH-eh-w8hQqc",
-    authDomain: "aspirasidigital-23d72.firebaseapp.com",
-    projectId: "aspirasidigital-23d72",
-    storageBucket: "aspirasidigital-23d72.firebasestorage.app",
-    messagingSenderId: "411512721383",
-    appId: "1:411512721383:web:aaee24b3b5d1097427f742",
-    measurementId: "G-T1SKRQ8W1M"
-  };
-
-  // Inisialisasi Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  // Simpan db ke global
-  window.db = db;
-</script>
-
-</body>
-</html>
-<script src="script.js"></script>
-
+</head>
 <body>
-  <body>
-  
-
-  <!-- Beranda -->
-  <div id="beranda" class="page">
-    <h1>Selamat Datang 👋</h1>
-    <p>Ini adalah beranda Aspirasi Digital 24/7.</p>
-  </div>
-</body>
 
   <!-- Header -->
   <header>
     <div class="logo">✨ Aspirasi Mahasiswa</div>
     <nav>
       <a href="index.html">Beranda</a>
-             </nav>
+    </nav>
   </header>
+  
+  <!-- Section Beranda -->
+  <section id="beranda" class="page">
+    <h2>Selamat Datang di Aspirasi Digital 🎉</h2>
+    <p>Ini adalah halaman utama berisi informasi singkat dan sambutan.</p>
+  </section>
 
   <!-- Hero Section -->
-<section class="hero">
-  <h1>Suaramu, Perubahan Kita</h1>
-  <p>Sampaikan aspirasi, ide, dan inspirasimu kapan saja 🌙☀️</p>
-  
-  <div class="hero-buttons">
-    <button onclick="openForm()">✍️ Ajukan Aspirasi</button>
-    <button onclick="lihatAspirasi()">📖 Lihat Aspirasi</button>
-    <button onclick="lihatStatistik()">📊 Statistik Aspirasi</button>
+  <section class="hero">
+    <h1>Suaramu, Perubahan Kita</h1>
+    <p>Sampaikan aspirasi, ide, dan inspirasimu kapan saja 🌙☀️</p>
+    
+    
+    <div class="hero-buttons">
+      <button onclick="openForm()">✍️ Ajukan Aspirasi</button>
+           <button onclick="lihatAspirasi()">📖 Lihat Aspirasi</button>
+          </div>
 
-<div id="aspirasiList"></div>
+    <div id="aspirasiList"></div>
+  </section>
+<div id="dynamic-content"></div>
+
+<!-- Modal untuk password -->
+<div id="aspirasiModal" style="display:none; padding:20px; border:1px solid #ccc; width:300px; margin:20px auto; text-align:center; border-radius:10px; background:#fff;">
+  <h3>🔐 Masuk ke Aspirasi</h3>
+  <input type="password" id="aspirasiPasswordInput" placeholder="Masukkan password admin" style="width:90%; padding:5px; margin:10px 0;">
+  <br>
+  <button onclick="cekPasswordDanTampilkanAspirasi()">🚀 Masuk</button>
+  <button onclick="document.getElementById('aspirasiModal').style.display='none'">❌ Batal</button>
+</div>
+
+
+  <!-- Modal Password -->
+  <div id="passwordModal" class="modal">
+    <div class="modal-content">
+      <h2>🔑 Masukkan Password</h2>
+      <input type="password" id="passwordInput" placeholder="Ketik password...">
+      <div class="modal-actions">
+        <button id="submitPassword">Masuk</button>
+        <button id="cancelPassword">Batal</button>
       </div>
-</section>
+      <p class="note">(Hanya untuk admin/monitoring)</p>
+    </div>
+  </div>
 
-<!-- Placeholder untuk konten interaktif -->
-<section id="dynamic-content"></section>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="script.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+  
+
+  <!-- Tentang -->
+  <div id="tentang" class="page" style="display:none; text-align:center;">
+    <h2>✨ Tentang Aspirasi Digital 24/7 ✨</h2>
+    <p style="font-size: 1.1em; line-height: 1.6; margin: 20px auto; max-width: 600px;">
+      Hai teman-teman 👋💕  
+      <br><br>
+      Aspirasi Digital 24/7 hadir sebagai ruang seru 🎉 buat kalian semua mahasiswa untuk 
+      menyampaikan <b>ide, uneg-uneg, maupun saran</b> kapan saja ⏰ tanpa harus nunggu ketemu langsung.
+      <br><br>
+      Tujuannya? Supaya suara kalian 🎤 bisa lebih cepat didengar, lebih mudah ditindaklanjuti, 
+      dan pastinya bikin kampus kita makin <b>asik, nyaman, dan maju bareng-bareng</b> 🚀✨
+      <br><br>
+      Jadi jangan ragu, yuk salurkan aspirasimu sekarang juga 🌟💌
+    </p>
+    <div style="margin-top:20px;">
+      <button onclick="showPage('aspirasi')" style="padding:10px 20px; border:none; border-radius:20px; background:#ff7eb9; color:white; font-weight:bold; cursor:pointer; transition:0.3s;">
+        📝 Ajukan Aspirasi
+      </button>
+      <button type="submit" id="submitBtn">🚀 Kirim Aspirasi</button>
+    </div>
+  </div>
+
+  <!-- Script -->
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+  <script src="script.js"></script>
+
 </body>
 </html>
-
-
-<!-- Modal Password -->
-<div id="passwordModal" class="modal">
-  <div class="modal-content">
-    <h2>🔑 Masukkan Password</h2>
-    <input type="password" id="passwordInput" placeholder="Ketik password...">
-    <div class="modal-actions">
-      <button id="submitPassword">Masuk</button>
-      <button id="cancelPassword">Batal</button>
-    </div>
-    <p class="note">(Hanya untuk admin/monitoring)</p>
-  </div>
-</div>
-
-<!-- Section Beranda -->
-<section id="beranda" class="page">
-  <h2>Selamat Datang di Aspirasi Digital 🎉</h2>
-  <p>Ini adalah halaman utama berisi informasi singkat dan sambutan.</p>
-</section>
-
-
-
-
-<div id="tentang" class="page" style="display:none; text-align:center;">
-  <h2>✨ Tentang Aspirasi Digital 24/7 ✨</h2>
-  <p style="font-size: 1.1em; line-height: 1.6; margin: 20px auto; max-width: 600px;">
-    Hai teman-teman 👋💕  
-    <br><br>
-    Aspirasi Digital 24/7 hadir sebagai ruang seru 🎉 buat kalian semua mahasiswa untuk 
-    menyampaikan <b>ide, uneg-uneg, maupun saran</b> kapan saja ⏰ tanpa harus nunggu ketemu langsung.
-    <br><br>
-    Tujuannya? Supaya suara kalian 🎤 bisa lebih cepat didengar, lebih mudah ditindaklanjuti, 
-    dan pastinya bikin kampus kita makin <b>asik, nyaman, dan maju bareng-bareng</b> 🚀✨
-    <br><br>
-    Jadi jangan ragu, yuk salurkan aspirasimu sekarang juga 🌟💌
-  </p>
-  <div style="margin-top:20px;">
-    <button onclick="showPage('aspirasi')" style="padding:10px 20px; border:none; border-radius:20px; background:#ff7eb9; color:white; font-weight:bold; cursor:pointer; transition:0.3s;">
-      📝 Ajukan Aspirasi
-      <button type="submit" id="submitBtn">🚀 Kirim Aspirasi</button>
-
-    </button>
-  </div>
-</div>
