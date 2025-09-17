@@ -12,6 +12,30 @@
 
   <!-- Baru script kamu -->
   <script src="script.js"></script>
+
+  <script type="module">
+  // Import Firebase
+  import { initializeApp } from "firebase/app";
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "firebase/analytics";
+  // 🔑 Ganti dengan config dari Firebase kamu
+  const firebaseConfig = {
+    apiKey: "AIzaSyCDLjvCpLxPtFJ6XBDOE6kTH-eh-w8hQqc",
+    authDomain: "aspirasidigital-23d72.firebaseapp.com",
+    projectId: "aspirasidigital-23d72",
+    storageBucket: "aspirasidigital-23d72.firebasestorage.app",
+    messagingSenderId: "411512721383",
+    appId: "1:411512721383:web:aaee24b3b5d1097427f742",
+    measurementId: "G-T1SKRQ8W1M"
+  };
+
+  // Inisialisasi Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Simpan db ke global
+  window.db = db;
+</script>
+
 </body>
 </html>
 <script src="script.js"></script>
@@ -25,35 +49,6 @@
     <h1>Selamat Datang 👋</h1>
     <p>Ini adalah beranda Aspirasi Digital 24/7.</p>
   </div>
-
-  <!-- Tentang -->
-  <div id="tentang" class="page" style="display:none;">
-    <h1>Tentang</h1>
-    <p>Platform ini dibuat untuk menampung aspirasi mahasiswa dengan cara mudah, cepat, dan transparan ✨</p>
-  </div>
-
-  <script src="script.js"></script>
-  <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
-
-<script>
-  // Konfigurasi Firebase dari project console
-  const firebaseConfig = {
-    apiKey: "API_KEY_MU",
-    authDomain: "NAMA_PROJECT.firebaseapp.com",
-    projectId: "NAMA_PROJECT",
-    storageBucket: "NAMA_PROJECT.appspot.com",
-    messagingSenderId: "xxxxxx",
-    appId: "xxxxxx"
-  };
-
-  // Inisialisasi Firebase
-  const app = firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-</script>
-
 </body>
 
   <!-- Header -->
@@ -108,7 +103,7 @@
 
 
 
-<!-- Halaman: Tentang -->
+
 <div id="tentang" class="page" style="display:none; text-align:center;">
   <h2>✨ Tentang Aspirasi Digital 24/7 ✨</h2>
   <p style="font-size: 1.1em; line-height: 1.6; margin: 20px auto; max-width: 600px;">
@@ -125,6 +120,8 @@
   <div style="margin-top:20px;">
     <button onclick="showPage('aspirasi')" style="padding:10px 20px; border:none; border-radius:20px; background:#ff7eb9; color:white; font-weight:bold; cursor:pointer; transition:0.3s;">
       📝 Ajukan Aspirasi
+      <button type="submit" id="submitBtn">🚀 Kirim Aspirasi</button>
+
     </button>
   </div>
 </div>
