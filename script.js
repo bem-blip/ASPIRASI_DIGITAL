@@ -5,12 +5,16 @@ window.onload = function() {
 };
 
 // === UTILITAS: SIMPAN & AMBIL ASPIRASI ===
-function saveAspirasi(aspirasi) {
-  let data = JSON.parse(localStorage.getItem("aspirasiList")) || [];
-  aspirasi.waktu = new Date().toISOString(); // simpan waktu
-  data.push(aspirasi);
-  localStorage.setItem("aspirasiList", JSON.stringify(data));
+async function saveAspirasi(aspirasi) {
+  try {
+    aspirasi.tanggal = new Date().toISOString(); // simpan waktu
+    await addDoc(collection(db, "aspirasi"), aspirasi);
+    alert("Aspirasi berhasil dikirim 🎉");
+  } catch (e) {
+    console.error("Error:", e);
+  }
 }
+  
 
 function getAspirasi() {
   return JSON.parse(localStorage.getItem("aspirasiList")) || [];
@@ -103,19 +107,23 @@ function checkAspirasiPassword() {
   }
 }
 
-function renderAspirasiList() {
-  let aspirasiList = getAspirasi();
+async function renderAspirasiList() {
+  const querySnapshot = await getDocs(collection(db, "aspirasi"));
+  let aspirasiHTML = "";
 
-  let aspirasiHTML = aspirasiList.map((item, index) => `
-    <div class="aspirasi-card">
-      <button onclick="deleteAspirasi(${index})" 
-        style="float:right; background:none; border:none; font-size:16px; cursor:pointer; color:#d63384;">❌</button>
-      <h4>💡 ${item.judul || "Tanpa Judul"}</h4>
-      <p><b>Kategori:</b> ${item.kategori || "-"}</p>
-      <p>${item.deskripsi || "(tidak ada deskripsi)"}</p>
-      <small style="color:#888;">🕒 ${new Date(item.waktu).toLocaleString()}</small>
-    </div>
-  `).join("");
+  querySnapshot.forEach((docSnap) => {
+    const item = docSnap.data();
+    aspirasiHTML += `
+      <div class="aspirasi-card">
+        <button onclick="deleteAspirasi('${docSnap.id}')" 
+          style="float:right; background:none; border:none; font-size:16px; cursor:pointer; color:#d63384;">❌</button>
+        <h4>💡 ${item.judul || "Tanpa Judul"}</h4>
+        <p><b>Kategori:</b> ${item.kategori || "-"}</p>
+        <p>${item.deskripsi || "(tidak ada deskripsi)"}</p>
+        <small style="color:#888;">🕒 ${new Date(item.tanggal).toLocaleString()}</small>
+      </div>
+    `;
+  });
 
   if (!aspirasiHTML) {
     aspirasiHTML = `<p style="text-align:center; color:#888;">Belum ada aspirasi masuk 🌸</p>`;
@@ -128,6 +136,7 @@ function renderAspirasiList() {
     </div>
   `;
 }
+
 
 // === STATISTIK (belum diubah) ===
 function lihatStatistik() {
@@ -153,4 +162,9 @@ function showPage(pageId) {
   if (targetPage) {
     targetPage.style.display = 'block';
   }
+}
+async function deleteAspirasi(id) {
+  await deleteDoc(doc(db, "aspirasi", id));
+  alert("Aspirasi dihapus ✅");
+  renderAspirasiList();
 }
